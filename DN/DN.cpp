@@ -1,5 +1,20 @@
 #include <iostream>
+#include <cmath>
 using namespace std;
+
+
+
+double factrial(int n) {
+  if (n < 2) {
+    return 1;
+  } else {
+    int temp=1;
+    for (int i = 2; i <= n; i++) {
+      temp *= i;
+    }
+    return temp;
+  }
+}
 
 
 //DN(2x2)のみ,四則演算(+-*/)のみ
@@ -152,7 +167,53 @@ public:
     return res;
   }
 
+  Matrix M_pow(int n) {
+    Matrix res;
+    if (!n) {
+      res.IdentityMatrix();
+      return res;
+    } else {
+      res = *this;
+      for (int i = 1; i < n; i++) {
+        res = res * (*this);
+      }
+      return res;
+    }
+  }
 
+
+  //DNの場合、ε^2=0なのでiのmax=1
+  Matrix M_exp(void) {
+		Matrix res;
+    double rn;
+    double dn;
+    if (this->Mat[1][0] != 0) {
+      cout << "対象外" << '\n';
+      return res;
+    }
+
+    if((this->Mat[0][0] == this->Mat[1][1]) && (this->Mat[0][0] != 0.0)) {
+      rn  = this->Mat[0][0];
+      res = Matrix(exp(rn));
+      if (this->Mat[0][1]!=0.0) {
+        Matrix temp;
+        Matrix m_dn;
+        dn = this->Mat[0][1];
+        m_dn.DualNumber();
+        m_dn = dn*m_dn;
+        for (int i = 0; i <= 1; i++) {
+          temp = temp + (1.0/factrial(i))*m_dn.M_pow(i);
+        }
+        res = res * temp;
+      }
+      return res;
+    } else {
+      for (int i = 0; i <= 1; i++) {
+        res = res + (1.0/factrial(i))*this->M_pow(i);
+      }
+      return res;
+    }
+	}
 
   void DualNumber(){
     Mat[0][0]=0.0; Mat[0][1]=1.0;
@@ -169,9 +230,14 @@ public:
     Mat[1][0]=0.0; Mat[1][1]=0.0;
   }
 
+
+
   double GetDN() {
     return Mat[0][1];
   }
+
+
+
 
   void show(){
     for (int i = 0; i < 2; i++) {
@@ -186,6 +252,19 @@ public:
   }
 };
 
+Matrix exp(Matrix obj) {
+  Matrix res;
+  res = obj.M_exp();
+  return res;
+}
+
+Matrix pow(Matrix obj,int n) {
+  Matrix res;
+  res = obj.M_pow(n);
+  return res;
+}
+
+
 Matrix Matrix_inv(Matrix obj) {
   Matrix res;
   res = obj.Inverse();
@@ -196,34 +275,37 @@ Matrix Matrix_inv(Matrix obj) {
 double func(double x) {
   double res;
   res = 4*x*x + 2*x + 3;
+  // res = exp(2.0*x);
   return res;
 }
 
-double differential_func(Matrix x) {
+double differential_func(double rx) {
   Matrix res;
+  Matrix x;
+
+  x.DualNumber();
+  x = x + Matrix(rx);
+
   res = Matrix(4.0)*x*x + Matrix(2.0)*x + Matrix(3.0);
+  // res = exp(2.0*x);
+
   return res.GetDN();
 }
 
  // main 関数
 int main(){
-  double x = 2.0;
+  double x = 1.0;
   double fx,fdx;
-  Matrix Dnum;
   Matrix res;
 
-  Dnum.DualNumber();
-  Dnum = Dnum + Matrix(x);
 
   fx  = func(x);
-  fdx = differential_func(Dnum);
+  fdx = differential_func(x);
 
   cout << "f(x)=4x*x + 2x + 3" << '\n';
   cout << "x=" << x << '\n';
   cout << "f(x)=" << fx << '\n';
   cout << "f'(x)=" << fdx << '\n';
-
-
 
 
   return 0;
