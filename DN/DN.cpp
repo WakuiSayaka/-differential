@@ -3,7 +3,7 @@
 using namespace std;
 
 
-
+//再帰の形で書き直せそう
 double factrial(int n) {
   if (n < 2) {
     return 1;
@@ -182,7 +182,32 @@ public:
   }
 
 
-  //DNの場合、ε^2=0なのでiのmax=1
+  //DNの場合、ε^2=0で収束するのを利用
+  //exp(a+ε)の計算は私はわからないのでexp(a+ε)=exp(a)+exp(ε)を使った
+  //exp(a)はdouble型の用意された関数を使って計算してからMatrix {{exp(a),0},{0,exp(a)}}にする
+  //exp(ε)の行列の計算はε^2=0のおかげですぐ収束
+  //三角関数
+  //sin(x+ε) = sin(x)*cos(ε) + cos(x)*sin(ε)
+  //cos(x+ε) = cos(x)*cos(ε) - sin(x)*sin(ε)
+  //sin(x),cos(x)はdouble型の用意された関数を使って計算してからMatrix {{sin(x),0},{0,sin(x)}},{{cos(x),0},{0,cos(x)}}
+  //sin(ε),cos(ε)は
+  //sin(A):=sum_k=0^inf ( ((-1)^k)/((2k+1)!)  ) * A^(2k+1)
+  //cos(A):=sum_k=0^inf (  ((-1)^k)/((2k+1)!) ) * A^2k
+  //k>=1の項はε^2=0により0になる
+  //sin(ε)=ε,cos(ε)=I
+  //まとめると
+  //sin(x+ε) = sin(x) + cos(x)*ε
+  //cos(x+ε) = cos(x) - sin(x)*ε
+  //対数関数(自然対数)
+  //x+ε=x*(1+ε/x)
+  //log(x*(1+ε/x))=log(x) + log(1+ε/x)
+  //log(x)はdouble型の用意された関数を使って計算してからMatrix{{log(x),0},{0,log(x)}}
+  //log(1+ε/x)は
+  //log(1+X) := sum_k=1^inf ((-1)^(k-1) * (x^k))/k
+  //k>=2の項はε^2=0により0になる
+  //log(1+ε/x) = (1/x)*ε
+  //まとめると
+  //log(x+ε) = log(x) + (1/x)*ε
   Matrix M_exp(void) {
 		Matrix res;
     double rn;
@@ -272,8 +297,15 @@ Matrix Matrix_inv(Matrix obj) {
 }
 
 
+
+
+
+
+
+
 double func(double x) {
   double res;
+
   res = 4*x*x + 2*x + 3;
   // res = exp(2.0*x);
   return res;
