@@ -186,7 +186,7 @@ public:
   //exp(a+ε)の計算は私はわからないのでexp(a+ε)=exp(a)+exp(ε)を使った
   //exp(a)はdouble型の用意された関数を使って計算してからMatrix {{exp(a),0},{0,exp(a)}}にする
   //exp(ε)の行列の計算はε^2=0のおかげですぐ収束
-  //三角関数
+  //三角関数(sin,cos)
   //sin(x+ε) = sin(x)*cos(ε) + cos(x)*sin(ε)
   //cos(x+ε) = cos(x)*cos(ε) - sin(x)*sin(ε)
   //sin(x),cos(x)はdouble型の用意された関数を使って計算してからMatrix {{sin(x),0},{0,sin(x)}},{{cos(x),0},{0,cos(x)}}
@@ -198,6 +198,20 @@ public:
   //まとめると
   //sin(x+ε) = sin(x) + cos(x)*ε
   //cos(x+ε) = cos(x) - sin(x)*ε
+  //三角関数(tan)
+  //tan(x+ε) = ( tan(x) + tan(ε) ) / ( 1 - tan(x) * tan(ε) )
+  //tan(x)はdouble型の用意された関数を使って計算してからMatrix {{tan(x),0},{0,tan(x)}}
+  //tan(ε)は
+  //tan(A) := sum_n=1^inf ( ( (-1)^(n-1) * 2^2n * (2^2n -1) * B_2n ) / (2n)! ) * x^(2n-1)
+  //(B_nはベルヌーイ数)
+  //n>=2の項はε^2=0により0になる
+  //tan(ε) = ε
+  //まとめると
+  //tan(x + ε) = (tan(x) + ε) / (1 - tan(x)ε) = {{tan(x),1},{0,tan(x)}}/{{1,-tan(x)},{0,1}}
+  //{{1,-tan(x)},{0,1}}の逆行列は{{1,-tan(x)},{0,1}}なので
+  //{{tan(x),1},{0,tan(x)}}*{{1,-tan(x)},{0,1}}={{tan(x),1-tan^2(x)},{0,tan(x)}}
+  //cos^2(x)=1/(1-tan^2(x))なので1/cos^2(x)=(1-tan^2(x))
+  //{{tan(x),1/cos^2(x)},{0,tan(x)}}=tan(x) + (1/cos^2(x))ε
   //対数関数(自然対数)
   //x+ε=x*(1+ε/x)
   //log(x*(1+ε/x))=log(x) + log(1+ε/x)
