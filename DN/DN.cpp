@@ -487,7 +487,7 @@ Matrix Matrix_inv(Matrix obj) {
 
 double func(double x) {
   double res;
-  // res = 4.0*x*x + 2.0*x + Matrix(3.0);
+  res = 4.0*x*x + 2.0*x + 3.0;
   // res = exp(x);
   // res = exp(2.0*x);
   // res = sin(x);
@@ -512,7 +512,7 @@ double differential_func(double rx) {
   x.DualNumber();
   x = x + Matrix(rx);
 
-  // res = 4.0*x*x + 2.0*x + Matrix(3.0);
+  res = 4.0*x*x + 2.0*x + Matrix(3.0);
   // res = exp(x);
   // res = exp(2.0*x);
   // res = sin(x);
@@ -532,7 +532,7 @@ double differential_func(double rx) {
 
  // main 関数
 int main(){
-  double x = 2.0;
+  double x = 1.0;
   double fx,fdx;
   Matrix res;
 
