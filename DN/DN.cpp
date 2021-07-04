@@ -5,14 +5,14 @@ using namespace std;
 
 //階乗
 double factrial(int n) {
-  if(n) {
+  if(n > 0) {
     return n * factrial(n-1);
   } else {
     return 1;
   }
 }
-//二項係数 nCr
-//tanのベルヌーイ数に必要だった。ベルヌーイ数が難しそうだったのでやめた。
+
+// //二項係数 nCr
 // double comb(int n,int r) {
 //   if(n < 0 || r < 0 || n < r) return 0.0;
 //   if(n == r || !r) return 1.0;
@@ -21,6 +21,20 @@ double factrial(int n) {
 //   }
 //   return comb(n - 1, r - 1) * (double)n / (double)r;
 // }
+//
+// //ベルヌーイ数（できなかった）
+// double Bernoulli(int n){
+//   if (n > 0) {
+//     double res;
+//     for (int i = 0; i < n; i++) {
+//       res += comb(n+1,i)*Bernoulli(i);
+//     }
+//     return -1.0/(double)(n+1.0)*res;
+//   } else {
+//     return 1;
+//   }
+// }
+
 
 //DN(2x2)のみ,四則演算(+-*/)のみ
 class Matrix{
@@ -73,7 +87,6 @@ public:
 
   friend const Matrix operator * (const Matrix lhs,const double rhs) {
     Matrix res;
-    Matrix temp = rhs;
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
         res.Mat[i][j] = lhs.Mat[i][j]*rhs;
@@ -103,6 +116,28 @@ public:
     return res;
   }
 
+  friend const Matrix operator + (const Matrix lhs,const double rhs) {
+    Matrix res;
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        res.Mat[i][j] = lhs.Mat[i][j];
+        if (i == j) res.Mat[i][j] += rhs;
+      }
+    }
+    return res;
+  }
+
+  friend const Matrix operator + (const double lhs,const Matrix rhs) {
+    Matrix res;
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        res.Mat[i][j] = rhs.Mat[i][j];
+        if (i == j) res.Mat[i][j] += lhs;
+      }
+    }
+    return res;
+  }
+
 
   friend const Matrix operator - (const Matrix lhs,const Matrix rhs) {
     Matrix res;
@@ -114,8 +149,62 @@ public:
     return res;
   }
 
+  friend const Matrix operator - (const Matrix lhs,const double rhs) {
+    Matrix res;
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        res.Mat[i][j] = lhs.Mat[i][j];
+        if (i == j) res.Mat[i][j] -= rhs;
+      }
+    }
+    return res;
+  }
+
+  friend const Matrix operator - (const double lhs,const Matrix rhs) {
+    Matrix res;
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        res.Mat[i][j] = -rhs.Mat[i][j];
+        if (i == j) res.Mat[i][j] += lhs;
+      }
+    }
+    return res;
+  }
+
 
   friend const Matrix operator / (const Matrix lhs,const Matrix rhs) {
+    Matrix res;
+    Matrix rhs_inv;
+    double temp;
+
+    temp = rhs.Mat[0][0]*rhs.Mat[1][1] - rhs.Mat[0][1]*rhs.Mat[1][0];
+    if (temp == 0) {
+      cout << "逆行列が存在しない" << '\n';
+      return res;
+    } else {
+      rhs_inv.Mat[0][0] = rhs.Mat[1][1];
+      rhs_inv.Mat[0][1] = -rhs.Mat[0][1];
+      rhs_inv.Mat[1][0] = -rhs.Mat[1][0];
+      rhs_inv.Mat[1][1] = rhs.Mat[0][0];
+      rhs_inv = (1.0/temp) * rhs_inv;
+    }
+    res = lhs * rhs_inv;
+
+    return res;
+  }
+
+  friend const Matrix operator / (const Matrix lhs,const double rhs) {
+    Matrix res;
+    for (int i = 0; i < 2; i++) {
+      for (int j = 0; j < 2; j++) {
+        res.Mat[i][j] = lhs.Mat[i][j]/rhs;
+      }
+    }
+    return res;
+  }
+
+
+  friend const Matrix operator / (const double lhs,const Matrix rhs) {
     Matrix res;
     Matrix rhs_inv;
     double temp;
@@ -151,6 +240,46 @@ public:
     Matrix res;
     this->Mat[0][0] = obj;
     this->Mat[1][1] = obj;
+    return *this;
+  }
+
+  Matrix operator += (const Matrix obj) {
+    *this = *this + obj;
+    return *this;
+  }
+
+  Matrix operator += (const double obj) {
+    *this = *this + obj;
+    return *this;
+  }
+
+  Matrix operator -= (const Matrix obj) {
+    *this = *this - obj;
+    return *this;
+  }
+
+  Matrix operator -= (const double obj) {
+    *this = *this - obj;
+    return *this;
+  }
+
+  Matrix operator *= (const Matrix obj) {
+    *this = *this * obj;
+    return *this;
+  }
+
+  Matrix operator *= (const double obj) {
+    *this = *this * obj;
+    return *this;
+  }
+
+  Matrix operator /= (const Matrix obj) {
+    *this = *this / obj;
+    return *this;
+  }
+
+  Matrix operator /= (const double obj) {
+    *this = *this / obj;
     return *this;
   }
 
@@ -510,9 +639,9 @@ double differential_func(double rx) {
   Matrix x;
 
   x.DualNumber();
-  x = x + Matrix(rx);
+  x = x + rx;  //ε + x
 
-  res = 4.0*x*x + 2.0*x + Matrix(3.0);
+  res = 4.0*x*x + 2.0*x + 3.0;
   // res = exp(x);
   // res = exp(2.0*x);
   // res = sin(x);
@@ -534,8 +663,6 @@ double differential_func(double rx) {
 int main(){
   double x = 1.0;
   double fx,fdx;
-  Matrix res;
-
 
   fx  = func(x);
   fdx = differential_func(x);
@@ -543,8 +670,6 @@ int main(){
   cout << "x=" << x << '\n';
   cout << "f(x)=" << fx << '\n';
   cout << "f'(x)=" << fdx << '\n';
-
-
 
   return 0;
 }
