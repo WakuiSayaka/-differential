@@ -36,7 +36,13 @@ double factrial(int n) {
 // }
 
 
-//DN(2x2)のみ,四則演算(+-*/)のみ
+//powを実数に対応させる為に必要
+bool is_integer( double x ){
+  return std::floor(x)==x;
+}
+
+
+//DN(2x2)のみ,1階微分のみ
 class Matrix{
     double Mat[2][2];
 public:
@@ -323,15 +329,15 @@ public:
 		Matrix res;
     double rn;
     double dn;
-    if (this->Mat[1][0] != 0) {
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
       cout << "対象外" << '\n';
       return res;
     }
 
-    if((this->Mat[0][0] == this->Mat[1][1]) && (this->Mat[0][0] != 0.0)) {
+    if(this->Mat[0][0]) {
       rn  = this->Mat[0][0];
       res = Matrix(exp(rn));
-      if (this->Mat[0][1]!=0.0) {
+      if (this->Mat[0][1]) {
         Matrix temp;
         Matrix m_dn;
         dn = this->Mat[0][1];
@@ -381,17 +387,17 @@ public:
     Matrix res;
     double rn;
     double dn;
-    if (this->Mat[1][0] != 0) {
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
       cout << "対象外" << '\n';
       return res;
     }
 
-    if((this->Mat[0][0] == this->Mat[1][1]) && (this->Mat[0][0] != 0.0)) {
+    if(this->Mat[0][0]) {
       Matrix sinx,cosx;
       rn  = this->Mat[0][0];
       sinx = Matrix(sin(rn));
       cosx = Matrix(cos(rn));
-      if (this->Mat[0][1]!=0.0) {
+      if (this->Mat[0][1]) {
         Matrix m_dn;
         dn = this->Mat[0][1];
         m_dn.DualNumber();
@@ -410,17 +416,17 @@ public:
     Matrix res;
     double rn;
     double dn;
-    if (this->Mat[1][0] != 0) {
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
       cout << "対象外" << '\n';
       return res;
     }
 
-    if((this->Mat[0][0] == this->Mat[1][1]) && (this->Mat[0][0] != 0.0)) {
+    if(this->Mat[0][0]) {
       Matrix sinx,cosx;
       rn  = this->Mat[0][0];
       sinx = Matrix(sin(rn));
       cosx = Matrix(cos(rn));
-      if (this->Mat[0][1]!=0.0) {
+      if (this->Mat[0][1]) {
         Matrix m_dn;
         dn = this->Mat[0][1];
         m_dn.DualNumber();
@@ -456,18 +462,18 @@ public:
     Matrix res;
     double rn;
     double dn;
-    if (this->Mat[1][0] != 0) {
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
       cout << "対象外" << '\n';
       return res;
     }
 
-    if((this->Mat[0][0] == this->Mat[1][1]) && (this->Mat[0][0] != 0.0)) {
+    if(this->Mat[0][0]) {
       Matrix sinx,cosx;
       Matrix sinxe,cosxe;
       rn  = this->Mat[0][0];
       sinx = Matrix(sin(rn));
       cosx = Matrix(cos(rn));
-      if (this->Mat[0][1]!=0.0) {
+      if (this->Mat[0][1]) {
         Matrix m_dn;
         dn = this->Mat[0][1];
         m_dn.DualNumber();
@@ -499,15 +505,15 @@ public:
 		Matrix res;
     double rn;
     double dn;
-    if (this->Mat[1][0] != 0) {
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
       cout << "対象外" << '\n';
       return res;
     }
 
-    if((this->Mat[0][0] == this->Mat[1][1]) && (this->Mat[0][0] != 0.0)) {
+    if(this->Mat[0][0]) {
       rn  = this->Mat[0][0];
       res = Matrix(log(rn));
-      if (this->Mat[0][1]!=0.0) {
+      if (this->Mat[0][1]) {
         Matrix m_dn;
         //ε/x
         dn = this->Mat[0][1]/rn;
@@ -542,20 +548,15 @@ public:
     Mat[1][0]=0.0; Mat[1][1]=0.0;
   }
 
-
-
   double GetDN() {
     return Mat[0][1];
   }
-
-
-
 
   void show(){
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
         cout << Mat[i][j];
-        if (j!=1) {
+        if (!j) {
           cout << ",";
         }
       }
@@ -600,18 +601,11 @@ Matrix pow(Matrix obj,int n) {
   return res;
 }
 
-
-Matrix Matrix_inv(Matrix obj) {
+Matrix inv(Matrix obj) {
   Matrix res;
   res = obj.Inverse();
   return res;
 }
-
-
-
-
-
-
 
 
 double func(double x) {
@@ -659,17 +653,42 @@ double differential_func(double rx) {
   return res.GetDN();
 }
 
+double Test_differential_func(double x) {
+  double res;
+  res = 8.0 * x + 2.0;                                 //(4.0 * x * x + 2.0 * x + 3.0)'
+  // res = exp(x);                                        // (exp(x))'
+  // res = 2.0 * exp(2.0 * x);                            // (exp(2.0 * x))'
+  // res = cos(x);                                        // (sin(x))'
+  // res = 2.0*cos(2.0*x);                                //(sin(2.0 * x))'
+  // res = sin(2.0*x);                                    // (sin(x) * sin(x))'
+  // res = -sin(x);                                       // (cos(x))'
+  // res = -2.0 * sin(2.0*x);                             // (cos(2.0 * x))'
+  // res = -sin(2.0*x);                                   // (cos(x) * cos(x))'
+  // res = 1.0/(cos(x)*cos(x));                           // (tan(x))'
+  // res = 2.0/(cos(2.0*x)*cos(2.0*x));                   // (tan(2.0 * x))'
+  // res = 2.0 * sin(x) / (cos(x) * cos(x) * cos(x));     // (tan(x) * tan(x))'
+  // res = 1.0 / x;                                       // (log(x))'
+  // res = 1.0 / x;                                       // (log(2.0 * x))'
+  // res = 2.0 * log(x) / x;                              // (log(x) * log(x))'
+  return res;
+}
+
  // main 関数
 int main(){
   double x = 1.0;
   double fx,fdx;
+  double test;
 
-  fx  = func(x);
-  fdx = differential_func(x);
+  fx   = func(x);
+  fdx  = differential_func(x);
+  test = Test_differential_func(x);
 
-  cout << "x=" << x << '\n';
-  cout << "f(x)=" << fx << '\n';
-  cout << "f'(x)=" << fdx << '\n';
+  cout << "x="     << x    << '\n';
+  cout << "f(x)="  << fx   << '\n';
+  cout << "f'(x)=" << fdx  << '\n';
+  cout << "f'(x)=" << test << '\n';
+
+
 
   return 0;
 }
