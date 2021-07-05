@@ -510,25 +510,25 @@ public:
       return res;
     }
 
-    if(this->Mat[0][0]) {
-      rn  = this->Mat[0][0];
-      res = Matrix(log(rn));
-      if (this->Mat[0][1]) {
-        Matrix m_dn;
-        //ε/x
-        dn = this->Mat[0][1]/rn;
-        m_dn.DualNumber();
-        m_dn = dn*m_dn;
-        //log(1+ε/x) の 1+ の部分はここで相殺される
-        for (int i = 1; i <= 1; i++) {
-          res = res + (pow(-1.0,(double)i-1) * m_dn.M_pow(i) )/(double)i ;
-        }
-      }
-      return res;
-    } else {
-      cout << "対象外" << '\n';
-      return res;
+    if(this->Mat[0][0] <= 0) {
+      cout << "対象外:log(x) x>0" << '\n';
     }
+
+
+    rn  = this->Mat[0][0];
+    res = Matrix(log(rn));
+    if (this->Mat[0][1]) {
+      Matrix m_dn;
+      //ε/x
+      dn = this->Mat[0][1]/rn;
+      m_dn.DualNumber();
+      m_dn = dn*m_dn;
+      //log(1+ε/x) の 1+ の部分はここで相殺される
+      for (int i = 1; i <= 1; i++) {
+        res = res + (pow(-1.0,(double)i-1) * m_dn.M_pow(i) )/(double)i ;
+      }
+    }
+    return res;
 	}
 
   //sqrt(x)=exp(0.5*log(x)) ただし x>0 に注意
@@ -541,8 +541,8 @@ public:
       return res;
     }
 
-    if ((this->Mat[0][0] < 0.0) || (this->Mat[0][1] <= 0.0)) {
-      cout << "対象外" << '\n';
+    if ((this->Mat[0][0] <= 0.0) || (this->Mat[0][1] <= 0.0)) {
+      cout << "対象外:sqrt(x) x>0" << '\n';
       return res;
     }
 
@@ -711,7 +711,7 @@ double Test_differential_func(double x) {
 
  // main 関数
 int main(){
-  double x = 2.0;
+  double x = 1.0;
   double fx,fdx;
   double test;
 
