@@ -526,12 +526,39 @@ public:
       }
       return res;
     } else {
-      for (int i = 1; i <= 1; i++) {
-        res = res + (pow(-1.0,(double)i-1) * this->M_pow(i) )/(double)i ;
-      }
+      cout << "対象外" << '\n';
       return res;
     }
 	}
+
+  //sqrt(x)=exp(0.5*log(x)) ただし x>0 に注意
+  Matrix M_sqrt(void){
+    Matrix res;
+    double rn;
+    double dn;
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
+      cout << "対象外" << '\n';
+      return res;
+    }
+
+    if ((this->Mat[0][0] < 0.0) || (this->Mat[0][1] <= 0.0)) {
+      cout << "対象外" << '\n';
+      return res;
+    }
+
+    if(this->Mat[0][0]) {
+      rn  = this->Mat[0][0];
+      res = Matrix(exp(0.5*log(rn)));
+      if (this->Mat[0][1]) {
+        res = 0.5 * this->M_log();
+        res = res.M_exp();
+      }
+      return res;
+    } else {
+      cout << "対象外" << '\n';
+      return res;
+    }
+  }
 
   void DualNumber(){
     Mat[0][0]=0.0; Mat[0][1]=1.0;
@@ -595,6 +622,12 @@ Matrix log(Matrix obj) {
   return res;
 }
 
+Matrix sqrt(Matrix obj) {
+  Matrix res;
+  res = obj.M_sqrt();
+  return res;
+}
+
 Matrix pow(Matrix obj,int n) {
   Matrix res;
   res = obj.M_pow(n);
@@ -625,6 +658,7 @@ double func(double x) {
   // res = log(x);
   // res = log(2.0*x);
   // res = log(x)*log(x);
+  // res = sqrt(x);
   return res;
 }
 
@@ -650,6 +684,7 @@ double differential_func(double rx) {
   // res = log(x);
   // res = log(2.0*x);
   // res = log(x)*log(x);
+  // res = sqrt(x);
   return res.GetDN();
 }
 
@@ -670,12 +705,13 @@ double Test_differential_func(double x) {
   // res = 1.0 / x;                                       // (log(x))'
   // res = 1.0 / x;                                       // (log(2.0 * x))'
   // res = 2.0 * log(x) / x;                              // (log(x) * log(x))'
+  // res = 0.5/sqrt(x);                                      // (sqrt(x))'
   return res;
 }
 
  // main 関数
 int main(){
-  double x = 1.0;
+  double x = 2.0;
   double fx,fdx;
   double test;
 
