@@ -567,6 +567,24 @@ public:
     return res;
   }
 
+  Matrix M_sinh(void) {
+    Matrix res;
+    res = 0.5 * (this->M_exp() - 1.0/this->M_exp() );
+    return res;
+  }
+
+  Matrix M_cosh(void) {
+    Matrix res;
+    res = 0.5 * (this->M_exp() + 1.0/this->M_exp() );
+    return res;
+  }
+
+  Matrix M_tanh(void) {
+    Matrix res;
+    res = this->M_sinh()/this->M_cosh();
+    return res;
+  }
+
   void DualNumber(){
     Mat[0][0]=0.0; Mat[0][1]=1.0;
     Mat[1][0]=0.0; Mat[1][1]=0.0;
@@ -598,6 +616,10 @@ public:
     }
   }
 };
+
+void show(Matrix obj) {
+  obj.show();
+}
 
 Matrix exp(Matrix obj) {
   Matrix res;
@@ -641,6 +663,24 @@ Matrix pow(Matrix obj,double n) {
   return res;
 }
 
+Matrix sinh(Matrix obj) {
+  Matrix res;
+  res = obj.M_sinh();
+  return res;
+}
+
+Matrix cosh(Matrix obj) {
+  Matrix res;
+  res = obj.M_cosh();
+  return res;
+}
+
+Matrix tanh(Matrix obj) {
+  Matrix res;
+  res = obj.M_tanh();
+  return res;
+}
+
 Matrix inv(Matrix obj) {
   Matrix res;
   res = obj.Inverse();
@@ -669,6 +709,9 @@ double func(double x) {
   // res = pow(x,-0.5);
   // res = pow(x,1.25);
   // res = pow(x,-1.25);
+  // res = sinh(x);
+  // res = cosh(x);
+  // res = tanh(x);
   return res;
 }
 
@@ -698,6 +741,9 @@ double differential_func(double rx) {
   // res = pow(x,-0.5);
   // res = pow(x,1.25);
   // res = pow(x,-1.25);
+  // res = sinh(x);
+  // res = cosh(x);
+  // res = tanh(x);
   return res.GetDN();
 }
 
@@ -721,8 +767,11 @@ double Test_differential_func(double x) {
   // res = 2.0 * log(x) / x;                              // (log(x) * log(x))'
   // res = 0.5/sqrt(x);                                   // (sqrt(x))'
   // res = -0.5*pow(x,-3.0/2.0);                          // (1.0/sqrt(x))'
-  // res = 1.25*pow(x,0.25);                              // (pow(x,5/4))'
+  // res = 1.25*pow(x,0.25);                              // (pow(x,1.25))'
   // res = -1.25*pow(x,-2.25);                            // (pow(x,-1.25))'
+  // res = cosh(x);                                       //(sinh(x))'
+  // res = sinh(x);                                       //(cosh(x))'
+  // res = 1.0/(cosh(x)*cosh(x));                            //(tanh(x))'
   return res;
 }
 
