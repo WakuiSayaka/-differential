@@ -569,19 +569,60 @@ public:
 
   Matrix M_sinh(void) {
     Matrix res;
-    res = 0.5 * (this->M_exp() - 1.0/this->M_exp() );
+
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
+      cout << "対象外" << '\n';
+      return res;
+    }
+
+    //0除算防止
+    if (this->Mat[0][0] >= 0) {
+      res = 0.5 * (this->M_exp() - 1.0/this->M_exp() );
+    } else {
+      Matrix negative;
+      negative = -*this;
+      res = 0.5 * (1.0/negative.M_exp() - negative.M_exp() );
+    }
     return res;
   }
 
   Matrix M_cosh(void) {
     Matrix res;
-    res = 0.5 * (this->M_exp() + 1.0/this->M_exp() );
+
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
+      cout << "対象外" << '\n';
+      return res;
+    }
+
+    //0除算防止
+    if (this->Mat[0][0] >= 0) {
+      res = 0.5 * (this->M_exp() + 1.0/this->M_exp() );
+    } else {
+      Matrix negative;
+      negative = -*this;
+      res = 0.5 * (1.0/negative.M_exp() + negative.M_exp() );
+    }
     return res;
   }
 
   Matrix M_tanh(void) {
     Matrix res;
-    res = this->M_sinh()/this->M_cosh();
+
+    if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
+      cout << "対象外" << '\n';
+      return res;
+    }
+
+    //オーバーフロー防止
+    if (this->Mat[0][0] > 0.5) {
+      Matrix temp = 2.0 * (*this);
+      res = 1.0 - 2.0/(1.0 + temp.M_exp());
+    } else if (this->Mat[0][0] < -0.5) {
+      Matrix temp = -2.0 * (*this);
+      res = 2.0/(1.0 + temp.M_exp()) - 1.0;
+    } else {
+      res = this->M_sinh()/this->M_cosh();
+    }
     return res;
   }
 
@@ -771,7 +812,7 @@ double Test_differential_func(double x) {
   // res = -1.25*pow(x,-2.25);                            // (pow(x,-1.25))'
   // res = cosh(x);                                       //(sinh(x))'
   // res = sinh(x);                                       //(cosh(x))'
-  // res = 1.0/(cosh(x)*cosh(x));                            //(tanh(x))'
+  // res = 1.0/(cosh(x)*cosh(x));                         //(tanh(x))'
   return res;
 }
 
