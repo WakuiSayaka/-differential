@@ -307,16 +307,36 @@ public:
     return res;
   }
 
-  Matrix M_pow(int n) {
+  Matrix M_pow(double n) {
     Matrix res;
-    if (!n) {
-      res.IdentityMatrix();
-      return res;
-    } else {
-      res = *this;
-      for (int i = 1; i < n; i++) {
-        res = res * (*this);
+    if (is_integer(n)) {
+      if (!n) {
+        res.IdentityMatrix();
+        return res;
+      } else if(n > 0) {
+        res = *this;
+        for (int i = 1; i < n; i++) {
+          res = res * (*this);
+        }
+        return res;
+      } else {
+        res = *this;
+        for (int i = 1; i < -n; i++) {
+          res = res * (*this);
+        }
+        return 1.0/res;
       }
+    } else {
+      if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
+        cout << "対象外" << '\n';
+        return res;
+      }
+      if ((this->Mat[0][0] <= 0.0) || (this->Mat[0][1] < 0.0)) {
+        cout << "a^x a>0 を満たしていない。" << '\n';
+        return res;
+      }
+      res = n * this->M_log();
+      res = res.M_exp();
       return res;
     }
   }
@@ -511,7 +531,7 @@ public:
     }
 
     if(this->Mat[0][0] <= 0) {
-      cout << "対象外:log(x) x>0" << '\n';
+      cout << "log(x) x>0 を満たしていない。" << '\n';
     }
 
 
@@ -534,30 +554,17 @@ public:
   //sqrt(x)=exp(0.5*log(x)) ただし x>0 に注意
   Matrix M_sqrt(void){
     Matrix res;
-    double rn;
-    double dn;
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
       cout << "対象外" << '\n';
       return res;
     }
-
-    if ((this->Mat[0][0] <= 0.0) || (this->Mat[0][1] <= 0.0)) {
-      cout << "対象外:sqrt(x) x>0" << '\n';
+    if ((this->Mat[0][0] <= 0.0) || (this->Mat[0][1] < 0.0)) {
+      cout << "sqrt(x) x>0 を満たしていない。" << '\n';
       return res;
     }
-
-    if(this->Mat[0][0]) {
-      rn  = this->Mat[0][0];
-      res = Matrix(exp(0.5*log(rn)));
-      if (this->Mat[0][1]) {
-        res = 0.5 * this->M_log();
-        res = res.M_exp();
-      }
-      return res;
-    } else {
-      cout << "対象外" << '\n';
-      return res;
-    }
+    res = 0.5 * this->M_log();
+    res = res.M_exp();
+    return res;
   }
 
   void DualNumber(){
@@ -628,7 +635,7 @@ Matrix sqrt(Matrix obj) {
   return res;
 }
 
-Matrix pow(Matrix obj,int n) {
+Matrix pow(Matrix obj,double n) {
   Matrix res;
   res = obj.M_pow(n);
   return res;
@@ -659,6 +666,9 @@ double func(double x) {
   // res = log(2.0*x);
   // res = log(x)*log(x);
   // res = sqrt(x);
+  // res = pow(x,-0.5);
+  // res = pow(x,1.25);
+  // res = pow(x,-1.25);
   return res;
 }
 
@@ -685,16 +695,20 @@ double differential_func(double rx) {
   // res = log(2.0*x);
   // res = log(x)*log(x);
   // res = sqrt(x);
+  // res = pow(x,-0.5);
+  // res = pow(x,1.25);
+  // res = pow(x,-1.25);
   return res.GetDN();
 }
 
+//fdxが合っているかの確認用
 double Test_differential_func(double x) {
   double res;
   res = 8.0 * x + 2.0;                                 //(4.0 * x * x + 2.0 * x + 3.0)'
   // res = exp(x);                                        // (exp(x))'
   // res = 2.0 * exp(2.0 * x);                            // (exp(2.0 * x))'
   // res = cos(x);                                        // (sin(x))'
-  // res = 2.0*cos(2.0*x);                                //(sin(2.0 * x))'
+  // res = 2.0*cos(2.0*x);                                // (sin(2.0 * x))'
   // res = sin(2.0*x);                                    // (sin(x) * sin(x))'
   // res = -sin(x);                                       // (cos(x))'
   // res = -2.0 * sin(2.0*x);                             // (cos(2.0 * x))'
@@ -705,13 +719,16 @@ double Test_differential_func(double x) {
   // res = 1.0 / x;                                       // (log(x))'
   // res = 1.0 / x;                                       // (log(2.0 * x))'
   // res = 2.0 * log(x) / x;                              // (log(x) * log(x))'
-  // res = 0.5/sqrt(x);                                      // (sqrt(x))'
+  // res = 0.5/sqrt(x);                                   // (sqrt(x))'
+  // res = -0.5*pow(x,-3.0/2.0);                          // (1.0/sqrt(x))'
+  // res = 1.25*pow(x,0.25);                              // (pow(x,5/4))'
+  // res = -1.25*pow(x,-2.25);                            // (pow(x,-1.25))'
   return res;
 }
 
  // main 関数
 int main(){
-  double x = 1.0;
+  double x = 2.0;
   double fx,fdx;
   double test;
 
@@ -723,8 +740,6 @@ int main(){
   cout << "f(x)="  << fx   << '\n';
   cout << "f'(x)=" << fdx  << '\n';
   cout << "f'(x)=" << test << '\n';
-
-
 
   return 0;
 }
