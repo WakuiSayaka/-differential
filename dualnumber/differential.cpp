@@ -26,12 +26,12 @@
 
 
 
-//f(x)
+//f(x) 実数
 double func(double x) {
   return 4.0*x*x + 2.0*x + 3.0;
 }
 
-//f(x)
+//f(x) 行列(2x2)
 Matrix func(Matrix x) {
   return 4.0*x*x + 2.0*x + 3.0;
 }
@@ -41,26 +41,17 @@ double differential_func(double rx) {
   Matrix x;
   x.DualNumber(); //ε
   x += rx;  //ε + x
-  
+
   return func(x).GetDN();
 }
 
-
-
- // main 関数
 int main(){
   double x;
-  double fx,fdx;
-  double test;
-
   //f(x)とf'(x)を出力する為の任意の値xを入力
   x = 2.0;
 
-  fx   = func(x);
-  fdx  = differential_func(x);
-
-  cout << "x="     << x    << '\n';
-  cout << "f(x)="  << fx   << '\n';
-  cout << "f'(x)=" << fdx  << '\n';
+  cout << "x="     << x                     << '\n';
+  cout << "f(x)="  << func(x)               << '\n';
+  cout << "f'(x)=" << differential_func(x)  << '\n';
   return 0;
 }
