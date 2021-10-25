@@ -21,19 +21,7 @@ double factrial(int n) {
 //   }
 //   return comb(n - 1, r - 1) * (double)n / (double)r;
 // }
-//
-// //ベルヌーイ数（できなかった）
-// double Bernoulli(int n){
-//   if (n > 0) {
-//     double res;
-//     for (int i = 0; i < n; i++) {
-//       res += comb(n+1,i)*Bernoulli(i);
-//     }
-//     return -1.0/(double)(n+1.0)*res;
-//   } else {
-//     return 1;
-//   }
-// }
+
 
 
 //powを実数に対応させる為に必要
@@ -462,21 +450,7 @@ public:
   }
 
 
-  //三角関数(tan) （やめた）
-  //tan(x+ε) = ( tan(x) + tan(ε) ) / ( 1 - tan(x) * tan(ε) )
-  //tan(x)はdouble型の用意された関数を使って計算してからMatrix {{tan(x),0},{0,tan(x)}}
-  //tan(ε)は
-  //tan(A) := sum_n=1^inf ( ( (-1)^(n-1) * 2^2n * (2^2n -1) * B_2n ) / (2n)! ) * x^(2n-1)
-  //(B_nはベルヌーイ数)
-  //n>=2の項はε^2=0により0になる
-  //tan(ε) = ε
-  //まとめると
-  //tan(x + ε) = (tan(x) + ε) / (1 - tan(x)ε) = {{tan(x),1},{0,tan(x)}}/{{1,-tan(x)},{0,1}}
-  //{{1,-tan(x)},{0,1}}の逆行列は{{1,-tan(x)},{0,1}}なので
-  //{{tan(x),1},{0,tan(x)}}*{{1,-tan(x)},{0,1}}={{tan(x),1-tan^2(x)},{0,tan(x)}}
-  //cos^2(x)=1/(1-tan^2(x))なので1/cos^2(x)=(1-tan^2(x))
-  //{{tan(x),1/cos^2(x)},{0,tan(x)}}=tan(x) + (1/cos^2(x))ε
-  //三角関数(tan) （こっちにした）
+  //三角関数(tan) 
   //tan(x+ε) = sin(x+ε)/cos(x+ε)
   Matrix M_tan(void) {
     Matrix res;
