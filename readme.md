@@ -1,3 +1,5 @@
+数値微分の練習
+
 * forward_difference
 <img src="https://latex.codecogs.com/gif.latex?f'(x)&space;\approx&space;\frac{f(x&plus;h)-f(x)}{h}" />
 
