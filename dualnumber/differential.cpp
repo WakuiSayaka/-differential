@@ -1,6 +1,5 @@
 #include "DualNumber.hpp"
 
-
 // 確認用の関数
 // return exp(x);
 // return exp(2.0*x);
@@ -37,12 +36,9 @@ Matrix func(Matrix x) {
 
 //f'(x)
 double differential_func(Matrix x) {
-  Matrix dn;
-
-  dn.DualNumber(); //ε
-  x += dn;  //x + ε
-
-  return func(x).GetDN();
+  //GetDNでf'(x)を取り出す
+  //f(x + ε) = f(x) + f'(x)*ε
+  return func(x + DualNumber() ).GetDN();
 }
 
 int main(){

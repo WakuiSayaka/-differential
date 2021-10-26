@@ -450,7 +450,7 @@ public:
   }
 
 
-  //三角関数(tan) 
+  //三角関数(tan)
   //tan(x+ε) = sin(x+ε)/cos(x+ε)
   Matrix M_tan(void) {
     Matrix res;
@@ -632,6 +632,7 @@ public:
   }
 };
 
+//関数
 void show(Matrix obj) {
   obj.show();
 }
@@ -699,5 +700,24 @@ Matrix tanh(Matrix obj) {
 Matrix inv(Matrix obj) {
   Matrix res;
   res = obj.Inverse();
+  return res;
+}
+
+//定数の代わり
+Matrix DualNumber(void) {
+  Matrix res;
+  res.DualNumber();
+  return res;
+}
+
+Matrix IdentityMatrix(void) {
+  Matrix res;
+  res.IdentityMatrix();
+  return res;
+}
+
+Matrix Zero(void) {
+  Matrix res;
+  res.Zero();
   return res;
 }
