@@ -25,7 +25,6 @@
 // return tanh(x);
 
 
-
 //f(x) 実数
 double func(double x) {
   return 4.0*x*x + 2.0*x + 3.0;
@@ -37,21 +36,24 @@ Matrix func(Matrix x) {
 }
 
 //f'(x)
-double differential_func(double rx) {
-  Matrix x;
-  x.DualNumber(); //ε
-  x += rx;  //ε + x
+double differential_func(Matrix x) {
+  Matrix dn;
+
+  dn.DualNumber(); //ε
+  x += dn;  //x + ε
 
   return func(x).GetDN();
 }
 
 int main(){
   double x;
+
   //f(x)とf'(x)を出力する為の任意の値xを入力
   x = 2.0;
 
   cout << "x="     << x                     << '\n';
   cout << "f(x)="  << func(x)               << '\n';
-  cout << "f'(x)=" << differential_func(x)  << '\n';
+  cout << "f'(x)=" << differential_func(x)  << '\n'; //Matrix(x)でも可能
+
   return 0;
 }
