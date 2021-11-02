@@ -23,14 +23,8 @@
 // return cosh(x);
 // return tanh(x);
 
-
-//f(x) 実数
-double func(double x) {
-  return 4.0*x*x + 2.0*x + 3.0;
-}
-
-//f(x) 行列(2x2)
-Matrix func(Matrix x) {
+template<typename T>
+T func(T x) {
   return 4.0*x*x + 2.0*x + 3.0;
 }
 
