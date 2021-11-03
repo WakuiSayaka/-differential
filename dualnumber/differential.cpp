@@ -28,22 +28,18 @@ T func(T x) {
   return 4.0*x*x + 2.0*x + 3.0;
 }
 
-//f'(x)
-double differential_func(Matrix x) {
-  //GetDNでf'(x)を取り出す
-  //f(x + ε) = f(x) + f'(x)*ε
-  return func(x + DualNumber() ).GetDN();
-}
-
 int main(){
   double x;
 
   //f(x)とf'(x)を出力する為の任意の値xを入力
   x = 2.0;
 
-  cout << "x="     << x                     << '\n';
-  cout << "f(x)="  << func(x)               << '\n';
-  cout << "f'(x)=" << differential_func(x)  << '\n'; //Matrix(x)でも可能
+  cout << "   x  = " << x                                << '\n';
+  cout << " f(x) = " << func(x)                          << '\n';
+  cout << "f'(x) = " << func(x + DualNumber() ).GetDN()  << '\n'; //Matrix(x)でも可能
+
+  //f(x + ε) = f(x) + f'(x)*ε = { { f(x) , f'(x) } , { 0 , f(x) } }
+  // show(func(x + DualNumber() ) );
 
   return 0;
 }
