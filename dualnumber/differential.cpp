@@ -34,9 +34,9 @@ int main(){
   //f(x)とf'(x)を出力する為の任意の値xを入力
   x = 2.0;
 
-  cout << "   x  = " << x                                << '\n';
-  cout << " f(x) = " << func(x)                          << '\n';
-  cout << "f'(x) = " << func(x + DualNumber() ).GetDN()  << '\n'; //Matrix(x)でも可能
+  std::cout << "   x  = " << x                                << '\n';
+  std::cout << " f(x) = " << func(x)                          << '\n';
+  std::cout << "f'(x) = " << func(x + DualNumber() ).GetDN()  << '\n'; //Matrix(x)でも可能
 
   //f(x + ε) = f(x) + f'(x)*ε = { { f(x) , f'(x) } , { 0 , f(x) } }
   // show(func(x + DualNumber() ) );

@@ -1,6 +1,6 @@
 #include <iostream>
 #include <cmath>
-using namespace std;
+// using namespace std;
 
 
 //階乗
@@ -173,7 +173,7 @@ public:
 
     temp = rhs.Mat[0][0]*rhs.Mat[1][1] - rhs.Mat[0][1]*rhs.Mat[1][0];
     if (temp == 0) {
-      cout << "逆行列が存在しない" << '\n';
+      std::cout << "逆行列が存在しない" << '\n';
       return res;
     } else {
       rhs_inv.Mat[0][0] = rhs.Mat[1][1];
@@ -205,7 +205,7 @@ public:
 
     temp = rhs.Mat[0][0]*rhs.Mat[1][1] - rhs.Mat[0][1]*rhs.Mat[1][0];
     if (temp == 0) {
-      cout << "逆行列が存在しない" << '\n';
+      std::cout << "逆行列が存在しない" << '\n';
       return res;
     } else {
       rhs_inv.Mat[0][0] = rhs.Mat[1][1];
@@ -283,7 +283,7 @@ public:
 
     temp = this->Mat[0][0]*this->Mat[1][1] - this->Mat[0][1]*this->Mat[1][0];
     if (temp == 0) {
-      cout << "逆行列が存在しない" << '\n';
+      std::cout << "逆行列が存在しない" << '\n';
       return *this;
     } else {
       res.Mat[0][0] = this->Mat[1][1];
@@ -316,11 +316,11 @@ public:
       }
     } else {
       if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-        cout << "対象外" << '\n';
+        std::cout << "対象外" << '\n';
         return res;
       }
       if ((this->Mat[0][0] <= 0.0) || (this->Mat[0][1] < 0.0)) {
-        cout << "a^x a>0 を満たしていない。" << '\n';
+        std::cout << "a^x a>0 を満たしていない。" << '\n';
         return res;
       }
       res = n * this->M_log();
@@ -338,7 +338,7 @@ public:
     double rn;
     double dn;
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
@@ -396,7 +396,7 @@ public:
     double rn;
     double dn;
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
@@ -425,7 +425,7 @@ public:
     double rn;
     double dn;
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
@@ -457,7 +457,7 @@ public:
     double rn;
     double dn;
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
@@ -500,12 +500,12 @@ public:
     double rn;
     double dn;
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
     if(this->Mat[0][0] <= 0) {
-      cout << "log(x) x>0 を満たしていない。" << '\n';
+      std::cout << "log(x) x>0 を満たしていない。" << '\n';
     }
 
 
@@ -529,11 +529,11 @@ public:
   Matrix M_sqrt(void){
     Matrix res;
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
     if ((this->Mat[0][0] <= 0.0) || (this->Mat[0][1] < 0.0)) {
-      cout << "sqrt(x) x>0 を満たしていない。" << '\n';
+      std::cout << "sqrt(x) x>0 を満たしていない。" << '\n';
       return res;
     }
     res = 0.5 * this->M_log();
@@ -545,7 +545,7 @@ public:
     Matrix res;
 
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
@@ -564,7 +564,7 @@ public:
     Matrix res;
 
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
@@ -583,7 +583,7 @@ public:
     Matrix res;
 
     if ((this->Mat[1][0] != 0) || (this->Mat[0][0] != this->Mat[1][1])) {
-      cout << "対象外" << '\n';
+      std::cout << "対象外" << '\n';
       return res;
     }
 
@@ -622,12 +622,12 @@ public:
   void show(){
     for (int i = 0; i < 2; i++) {
       for (int j = 0; j < 2; j++) {
-        cout << Mat[i][j];
+        std::cout << Mat[i][j];
         if (!j) {
-          cout << ",";
+          std::cout << ",";
         }
       }
-      cout << '\n';
+      std::cout << '\n';
     }
   }
 };
