@@ -1,6 +1,5 @@
 #include <iostream>
 #include <cmath>
-// using namespace std;
 
 
 //階乗
@@ -11,17 +10,6 @@ double factrial(int n) {
     return 1;
   }
 }
-
-// //二項係数 nCr
-// double comb(int n,int r) {
-//   if(n < 0 || r < 0 || n < r) return 0.0;
-//   if(n == r || !r) return 1.0;
-//   if (r > n-r) {
-//     r = n-r;
-//   }
-//   return comb(n - 1, r - 1) * (double)n / (double)r;
-// }
-
 
 
 //powを実数に対応させる為に必要
