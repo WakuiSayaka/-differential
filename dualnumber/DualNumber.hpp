@@ -20,7 +20,7 @@ bool is_integer( double x ){
 
 //DN(2x2)のみ,1階微分のみ
 class Matrix{
-    double Mat[2][2];
+  double Mat[2][2];
 public:
   ~Matrix(void) {};
 
