@@ -19,7 +19,7 @@ int main(void) {
   x = 1.0;
 
   //f(x)の最上位bitを求める
-  n = floor(log2(fabs(func(x))));
+  n = floor(log2(fabs(x)));
 
   //f(x)の最上位bit
   h = pow( 2.0 , n );
