@@ -12,8 +12,7 @@ double forward_diff(double h,double x) {
 }
 
 int main(void) {
-  double h,x;
-  int    n;
+  double h,x,n;
 
   //任意の値
   x = 1.0;
